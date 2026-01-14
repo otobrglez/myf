@@ -5,7 +5,7 @@
 ## Deployment
 
 ```bash
-./bin/build-config.sh # will generate .env.local with environment variables needed.
+./bin/build-config.sh # will generate .env.local with the required environment variables.
 ```
 
 ## Configuration
