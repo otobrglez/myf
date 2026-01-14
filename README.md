@@ -21,8 +21,8 @@ terraform apply
 
 ## Configuration and customisation
 
-1. Categories are defined in [`config/categories.yaml`](./config/categories.yaml)
-2. Settings and user mappings in [`config/settings.yaml`](./config/settings.yaml)
+1. Categories are defined in [`categories.yaml`](./src/config/categories.yaml)
+2. Settings and user mappings in [`settings.yaml`](./src/config/settings.yaml)
 3. Firestore configuration is obtained via `terraform output` by running [`bin/build-config.sh`](./bin/build-config.sh)
 
 \- [Oto Brglez](https://github.com/otobrglez)
