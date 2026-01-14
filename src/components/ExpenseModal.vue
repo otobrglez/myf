@@ -73,16 +73,15 @@ const deleteExpense = async (id: string) => {
 <template>
   <div v-if="isOpen" class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-content">
-      <h3>Add Expense</h3>
+      <h3>{{ $t('add_expense') }}</h3>
       <p v-if="context">
         {{ context.category.name }} - {{ getMonthName(context.yearMonth) }} {{
           context.yearMonth[0]
         }}
       </p>
 
-      <!-- Existing Expenses List -->
       <div v-if="expenses.length > 0" class="existing-expenses">
-        <label>Obstoječi stroški</label>
+        <label>{{ $t('existing_expenses') }}</label>
         <ul>
           <li v-for="expense in expenses" :key="expense.id" class="expense-item">
           <span class="user-badge"
@@ -90,7 +89,7 @@ const deleteExpense = async (id: string) => {
             {{ expense.targetUserName || '?' }}
           </span>
             <span class="expense-amount">{{ formatCurrency(expense.amount) }}</span>
-            <button @click="deleteExpense(expense.id!)" class="btn-delete" title="Delete">×</button>
+            <button @click="deleteExpense(expense.id!)" class="btn-delete">×</button>
           </li>
         </ul>
       </div>
@@ -98,12 +97,12 @@ const deleteExpense = async (id: string) => {
       <div class="divider" v-if="expenses.length > 0"></div>
 
       <div class="form-group">
-        <label>Amount (EUR)</label>
+        <label>{{ $t('amount_currency') }}</label>
         <input type="number" v-model="expenseAmount" placeholder="0.00" step="1.00" autofocus/>
       </div>
 
       <div class="form-group">
-        <label>Pick User</label>
+        <label>{{ $t('pick_user') }}</label>
         <select v-model="selectedUserId" class="user-select">
           <option v-for="user in userSettings" :key="user.id" :value="user.id">
             {{ user.name }}
@@ -112,8 +111,10 @@ const deleteExpense = async (id: string) => {
       </div>
 
       <div class="modal-actions">
-        <button @click="$emit('close')" class="btn-secondary">Cancel</button>
-        <button @click="saveExpense" class="btn-primary" :disabled="!expenseAmount">Save</button>
+        <button @click="$emit('close')" class="btn-secondary">{{ $t('close') }}</button>
+        <button @click="saveExpense" class="btn-primary" :disabled="!expenseAmount">
+          {{ $t('save') }}
+        </button>
       </div>
     </div>
   </div>
@@ -193,6 +194,12 @@ const deleteExpense = async (id: string) => {
   margin-bottom: 15px;
 }
 
+.existing-expenses ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .existing-expenses label {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -206,6 +213,10 @@ const deleteExpense = async (id: string) => {
   align-items: center;
   padding: 2px 0;
   border-bottom: 1px solid #f1f3f4;
+}
+
+.expense-item:last-child {
+  border-bottom: none;
 }
 
 .user-badge {

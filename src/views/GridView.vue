@@ -10,6 +10,7 @@ import {useAuthStore} from "@/stores/auth.ts";
 import type {FieldValue} from 'firebase/firestore';
 import ExpenseModal from "@/components/ExpenseModal.vue";
 import {formatCurrency} from "@/currency.ts";
+import * as ss from 'simple-statistics';
 
 export interface Expense {
   id?: string;
@@ -86,7 +87,7 @@ const getYearlyAverageCategory = (year: number, categoryId: string): number => {
   return sum / activeMonths.length;
 };
 
-// Update yearly average total too if you want it to ignore "zero-expense" months globally
+// Update the yearly average total too if you want it to ignore "zero-expense" months globally
 const getYearlyAverageTotal = (year: number): number => {
   const visibleMonths = monthsForYear(year).filter(ym => !isFuture(ym));
 
@@ -99,16 +100,64 @@ const getYearlyAverageTotal = (year: number): number => {
   return sum / activeMonths.length;
 };
 
+const getProjectedAmount = (year: number, month: number, categoryId: string): number => {
+  const dataPoints: number[][] = [];
+  let globalIndex = 0;
+  let targetIndex = -1;
+
+  // Sort years to ensure chronological order for the trend
+  const sortedYears = [...availableYears].sort((a, b) => a - b);
+
+  sortedYears.forEach(y => {
+    monthsForYear(y).forEach(ym => {
+      // If this is the cell we want to predict for, save its index
+      if (ym[0] === year && ym[1] === month) {
+        targetIndex = globalIndex;
+      }
+
+      // Training data: only use months that are NOT in the future
+      if (!isFuture(ym)) {
+        const monthlyExpenses = getExpensestForCell(ym, categoryId);
+        const total = monthlyExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+
+        // Add point if there's spending, helping the trend ignore "gap" months
+        if (total > 0) {
+          dataPoints.push([globalIndex, total]);
+        }
+      }
+      globalIndex++;
+    });
+  });
+
+  if (dataPoints.length < 2) return 0;
+
+  // Calculate trend using all available historical data
+  const line = ss.linearRegression(dataPoints);
+  const stepper = ss.linearRegressionLine(line);
+
+  const prediction = stepper(targetIndex !== -1 ? targetIndex : globalIndex);
+
+  return prediction > 0 ? prediction : 0;
+};
+
+const getMonthProgress = () => {
+  const now = new Date();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  return now.getDate() / daysInMonth;
+};
+
+const isCurrentMonth = (yearMonth: YearMonth) => {
+  const now = new Date();
+  return yearMonth[0] === now.getFullYear() && yearMonth[1] === (now.getMonth() + 1);
+};
 
 </script>
 <template>
   <div class="dashboard-container">
     <div class="spreadsheet-grid">
-
-      <!-- Single Global Header Row -->
       <div class="row header-row">
-        <div class="cell corner-cell"></div> <!-- Empty top-left cell -->
-        <div class="cell header-total">Total</div>
+        <div class="cell corner-cell"></div>
+        <div class="cell header-total">{{ $t('total') }}</div>
 
         <div v-for="{id, name} in categories" :key="id" class="cell category-header">
           {{ name }}
@@ -139,6 +188,8 @@ const getYearlyAverageTotal = (year: number): number => {
                           :category="category"
                           :expenses="getExpensestForCell(yearMonth, category.id)"
                           :user-settings="userSettings"
+                          :target-amount="isCurrentMonth(yearMonth) ? getProjectedAmount(yearMonth[0], yearMonth[1], category.id) : 0"
+                          :month-progress="getMonthProgress()"
                           @edit="openEditModal(yearMonth, category)"></CellEditor>
             </div>
           </div>
@@ -146,7 +197,7 @@ const getYearlyAverageTotal = (year: number): number => {
 
         <!-- Yearly Average Footer Row -->
         <div class="row year-footer-row" v-if="hasVisibleMonths(year)">
-          <div class="cell footer-label">Avg.</div>
+          <div class="cell footer-label">{{ $t('avg_short') }}</div>
 
           <!-- Average of Total Column -->
           <div class="cell footer-total-cell">
@@ -247,10 +298,8 @@ const getYearlyAverageTotal = (year: number): number => {
 
 .year-label {
   font-weight: bold;
-  /* font-size: 1.1rem; */
-  /* color: #202124; */
-  text-align: justify;
-  /* border-top: 2px solid #999;  Stronger line above the year */
+  justify-content: center;
+  align-items: center;
 }
 
 .empty-filler {
@@ -261,13 +310,14 @@ const getYearlyAverageTotal = (year: number): number => {
 .month-name-cell {
   color: #5f6368;
   background-color: #fafbfc;
-  text-align: right !important;
-  align-items: normal;
+  justify-content: center;
+  align-items: center;
 }
 
 .row-total-cell {
   background-color: #f8f9fa;
   justify-content: flex-end;
+  align-items: center;
   font-variant-numeric: tabular-nums;
   color: #202124;
 }
