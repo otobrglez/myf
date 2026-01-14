@@ -1,0 +1,22 @@
+@import './base.css';
+
+#app {
+  max-width: 1550px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsl(0, 43%, 31%);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(0, 87%, 22%, 0.2);
+  }
+}

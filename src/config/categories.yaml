@@ -1,0 +1,33 @@
+categories:
+  - name: "PUP Saubermacher"
+    id: pupsaubermacher
+
+  - name: "Komunalno Podjetje Velenje"
+    id: kpv
+
+  - name: "Elektro Celje (ECE)"
+    id: elektrocelje
+
+  - name: "T-2"
+    id: t2
+
+  - name: "Šola / Rudi"
+    id: sola-rudi
+
+  - name: "Šola / Tinkara"
+    id: sola-tinkara
+
+  - name: "GŠ / Rudi"
+    id: gsrudi
+
+  - name: "GŠ / Tinkara"
+    id: gstinkara
+
+  - name: "Plezanje / Tinkara"
+    id: plezantinkara
+
+  - name: "Robotika / Rudi"
+    id: robotikarudi
+
+  - name: "Zavarovanje / Hiša"
+    id: zavarovanje-hisa

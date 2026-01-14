@@ -1,0 +1,13 @@
+app_settings:
+  yearsBack: 2
+  currency: EUR
+  dateFormat: 'YYYY-MM-DD'
+
+users_settings:
+  - id: NyQG7K7Rl7eYmKyqf6MTsa2XjrH2
+    name: Oto Brglez
+    color: "#9fc5e8"
+
+  - id: zDxNxYuHi5aN2fHxQuhhsiW7CDD2
+    name: Martina Brglez
+    color: "#d5a6bd"

@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import {computed} from "vue";
+import type {Category} from '@/stores/categories';
+import type {YearMonth} from "@/clock.ts";
+import type {Expense} from "@/views/GridView.vue";
+import type {UserSetting} from "@/stores/settings.ts";
+import {formatCurrency} from "@/currency.ts";
+
+const {expenses, userSettings} = defineProps<{
+  yearMonth: YearMonth;
+  category: Category;
+  expenses: Expense[];
+  userSettings: UserSetting[];
+}>();
+
+defineEmits(['edit']);
+
+const groupedExpenses = computed(() => {
+  return expenses.reduce((acc, curr) => {
+    const userId = curr.targetUserId || 'unknown';
+    if (!acc[userId]) {
+      const setting = userSettings.find(s => s.id === userId);
+      acc[userId] = {
+        name: curr.targetUserName || '?',
+        color: setting?.color || '#f1f3f4', // Default grey if not found
+        total: 0
+      };
+    }
+    acc[userId].total += curr.amount;
+    return acc;
+  }, {} as Record<string, { name: string; color: string; total: number }>);
+});
+</script>
+
+<template>
+  <div class="cell-editor" @click="$emit('edit')">
+    <div class="breakdown" v-if="Object.keys(groupedExpenses).length > 0">
+      <div v-for="(data, userId) in groupedExpenses" :key="userId" class="user-row"
+           :style="{ backgroundColor: data.color }">
+        <span class="amount">{{ formatCurrency(data.total) }}</span>
+      </div>
+    </div>
+    <div v-else class="breakdown empty">
+      <span class="amount">
+      —
+      </span>
+
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.cell-editor {
+  width: 100%;
+  padding: 0;
+  cursor: pointer;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2px;
+}
+
+.breakdown.empty .amount {
+  color: #d1d1d1;
+  text-align: center;
+}
+
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-bottom: 1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.amount {
+  text-align: right;
+  flex-grow: 1;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+
+</style>

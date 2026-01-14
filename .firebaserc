@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "my-f-484214"
+  },
+  "targets": {
+    "my-f-484214": {
+      "hosting": {
+        "live": [
+          "myf-live"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
