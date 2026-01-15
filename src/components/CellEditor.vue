@@ -24,7 +24,7 @@ const groupedExpenses = computed(() => {
       const setting = userSettings.find(s => s.id === userId);
       acc[userId] = {
         name: curr.targetUserName || '?',
-        color: setting?.color || '#f1f3f4', // Default grey if not found
+        color: setting?.color || '#f1f3f4',
         total: 0
       };
     }
@@ -39,7 +39,6 @@ const progressStyle = computed(() => {
   if (!targetAmount || targetAmount <= 0) return {};
 
   const percent = Math.min((totalSpent.value / targetAmount) * 100, 100);
-  // If we've spent more than the expected progress (e.g., 50% of month passed, but 80% of avg spent)
   const isOverPace = percent > (monthProgress || 0) * 100;
 
   return {
@@ -131,17 +130,9 @@ const progressStyle = computed(() => {
   justify-content: space-between;
   align-items: center;
   opacity: 0.4;
-  /*
-  padding: 1px 5px;
-  opacity: 0.5;
-  font-style: italic;
-  font-size: 0.85em;
-  border-top: 1px dashed #ccc;
-  margin-top: 2px; */
 }
 
 .estimate-label {
-  /* font-size: 0.8em; */
   color: #666;
   margin-right: 4px;
 }

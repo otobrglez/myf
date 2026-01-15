@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {type Category, useCategoryStore} from '@/stores/categories' // Import the store
+import {type Category, useCategoryStore} from '@/stores/categories'
 import {useSettingsStore} from "@/stores/settings.ts";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import CellEditor from "@/components/CellEditor.vue";
@@ -31,7 +31,6 @@ const authStore = useAuthStore()
 const categories = useCategoryStore().allCategories
 const {availableYears, userSettings} = useSettingsStore()
 
-// Editor
 const isModalOpen = ref(false)
 const editingContext = ref<{ yearMonth: YearMonth; category: Category } | null>(null)
 
@@ -41,7 +40,6 @@ const openEditModal = (yearMonth: YearMonth, category: Category) => {
 }
 
 
-// Expenses
 const expenses = ref<Expense[]>([]);
 let unsubscribe: (() => void) | null = null;
 
@@ -87,7 +85,6 @@ const getYearlyAverageCategory = (year: number, categoryId: string): number => {
   return sum / activeMonths.length;
 };
 
-// Update the yearly average total too if you want it to ignore "zero-expense" months globally
 const getYearlyAverageTotal = (year: number): number => {
   const visibleMonths = monthsForYear(year).filter(ym => !isFuture(ym));
 
@@ -105,22 +102,18 @@ const getProjectedAmount = (year: number, month: number, categoryId: string): nu
   let globalIndex = 0;
   let targetIndex = -1;
 
-  // Sort years to ensure chronological order for the trend
   const sortedYears = [...availableYears].sort((a, b) => a - b);
 
   sortedYears.forEach(y => {
     monthsForYear(y).forEach(ym => {
-      // If this is the cell we want to predict for, save its index
       if (ym[0] === year && ym[1] === month) {
         targetIndex = globalIndex;
       }
 
-      // Training data: only use months that are NOT in the future
       if (!isFuture(ym)) {
         const monthlyExpenses = getExpensestForCell(ym, categoryId);
         const total = monthlyExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
 
-        // Add point if there's spending, helping the trend ignore "gap" months
         if (total > 0) {
           dataPoints.push([globalIndex, total]);
         }
@@ -131,7 +124,6 @@ const getProjectedAmount = (year: number, month: number, categoryId: string): nu
 
   if (dataPoints.length < 2) return 0;
 
-  // Calculate trend using all available historical data
   const line = ss.linearRegression(dataPoints);
   const stepper = ss.linearRegressionLine(line);
 
@@ -164,17 +156,14 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
         </div>
       </div>
 
-      <!-- Data Rows grouped by Year -->
       <div v-for="year in availableYears" :key="year" class="year-section">
 
-        <!-- Year Title Row (Spans across or acts as a separator) -->
         <div class="row year-separator-row" v-if="hasVisibleMonths(year)">
           <div class="cell year-label">{{ year }}</div>
           <div class="cell empty-filler"></div>
           <div v-for="n in categories.length" :key="n" class="cell empty-filler"></div>
         </div>
 
-        <!-- Month Rows -->
         <template v-for="yearMonth in monthsForYear(year)" :key="yearMonth.join('-')">
           <div v-if="!isFuture(yearMonth)" class="row month-row">
             <div class="cell month-name-cell">{{ getMonthName(yearMonth) }}</div>
@@ -195,16 +184,13 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
           </div>
         </template>
 
-        <!-- Yearly Average Footer Row -->
         <div class="row year-footer-row" v-if="hasVisibleMonths(year)">
           <div class="cell footer-label">{{ $t('avg_short') }}</div>
 
-          <!-- Average of Total Column -->
           <div class="cell footer-total-cell">
             {{ formatCurrency(getYearlyAverageTotal(year)) }}
           </div>
 
-          <!-- Average for each Category Column -->
           <div v-for="category in categories" :key="'avg-' + category.id"
                class="cell footer-category-cell">
             {{ formatCurrency(getYearlyAverageCategory(year, category.id)) }}
@@ -235,7 +221,6 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
 
 .row {
   display: grid;
-  /* Added 80px for the Total column */
   grid-template-columns: 100px 80px repeat(v-bind('categories.length'), minmax(90px, 1fr));
 }
 
@@ -274,19 +259,18 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
   display: flex;
   align-items: center;
   padding: 3px;
-  min-height: 40px; /* Ensure there is enough vertical room for 2 lines */
+  min-height: 40px;
 
   container-type: inline-size;
 
   font-size: clamp(9px, 8cqw, 13px);
 
   inline-size: 100%;
-  overflow-wrap: break-word; /* Break long words if necessary */
-  hyphens: auto; /* Add hyphens if the language supports it (sl-SI does!) */
-  line-height: 1.1; /* Tight line height for multi-line headers */
+  overflow-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.1;
 }
 
-/* Year Separator Styling */
 .year-separator-row {
   background-color: #ffffff;
 }
@@ -306,7 +290,6 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
   background-color: #ffffff;
 }
 
-/* Month Column Styling */
 .month-name-cell {
   color: #5f6368;
   background-color: #fafbfc;
@@ -326,7 +309,6 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
   background-color: #f1f3f4;
 }
 
-/* Footer (Averages) Styling */
 .year-footer-row {
   background-color: #fdfdfd;
   margin-bottom: 1.5rem;
