@@ -7,8 +7,8 @@ import type {Category} from "@/stores/categories";
 import type {YearMonth} from "@/clock.ts";
 import type {UserSetting} from "@/stores/settings.ts";
 import {getMonthName} from "@/clock.ts";
-import type {Expense} from "@/views/GridView.vue";
 import {formatCurrency} from "@/currency.ts";
+import type {Expense} from "@/expenses.ts";
 
 const props = defineProps<{
   isOpen: boolean;

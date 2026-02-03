@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import {ref} from 'vue'
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import {auth} from '@/firebase'
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const loading = ref(false)
+
+const handleLogin = async () => {
+  error.value = ''
+  loading.value = true
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value)
+    console.log('User logged in:', userCredential.user.uid)
+    router.push('/')
+  } catch (err: any) {
+    console.error('Login error:', err)
+    error.value = err.message || 'Failed to login. Please check your credentials.'
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login-container">
     <form @submit.prevent="handleLogin" class="login-form">
@@ -28,36 +58,6 @@
     </form>
   </div>
 </template>
-
-<script setup lang="ts">
-import {ref} from 'vue'
-import {signInWithEmailAndPassword} from 'firebase/auth'
-import {auth} from '@/firebase'
-import {useRouter} from 'vue-router'
-
-const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const loading = ref(false)
-
-const handleLogin = async () => {
-  error.value = ''
-  loading.value = true
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value)
-    console.log('User logged in:', userCredential.user.uid)
-    router.push('/')
-  } catch (err: any) {
-    console.error('Login error:', err)
-    error.value = err.message || 'Failed to login. Please check your credentials.'
-  } finally {
-    loading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .login-container {

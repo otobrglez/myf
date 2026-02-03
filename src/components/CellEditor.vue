@@ -2,9 +2,9 @@
 import {computed} from "vue";
 import type {Category} from '@/stores/categories';
 import type {YearMonth} from "@/clock.ts";
-import type {Expense} from "@/views/GridView.vue";
 import type {UserSetting} from "@/stores/settings.ts";
 import {formatCurrency} from "@/currency.ts";
+import type {Expense} from "@/expenses.ts";
 
 const {expenses, userSettings, targetAmount, monthProgress} = defineProps<{
   yearMonth: YearMonth;
@@ -35,16 +35,6 @@ const groupedExpenses = computed(() => {
 
 const totalSpent = computed(() => expenses.reduce((sum, e) => sum + e.amount, 0));
 
-const progressStyle = computed(() => {
-  if (!targetAmount || targetAmount <= 0) return {};
-
-  const percent = Math.min((totalSpent.value / targetAmount) * 100, 100);
-  const isOverPace = percent > (monthProgress || 0) * 100;
-
-  return {
-    background: `linear-gradient(90deg, ${isOverPace ? '#fff0f0' : '#f0f7ff'} ${percent}%, transparent ${percent}%)`
-  };
-});
 </script>
 
 <template>

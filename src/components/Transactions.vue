@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, type UnwrapRef} from "vue";
 import {collection, onSnapshot, query, orderBy} from "firebase/firestore";
 import {db} from "@/firebase.ts";
 import type {Expense} from "@/expenses.ts";
@@ -27,6 +27,11 @@ onMounted(() => {
 onUnmounted(() => {
   if (unsubscribe) unsubscribe();
 });
+
+function formatDate(dateRef: UnwrapRef<Expense["createdAt"]>) {
+  let date = (dateRef as any)?.toDate();
+  return date?.toLocaleDateString(undefined, {year: 'numeric', month: 'short', day: 'numeric'})
+}
 
 </script>
 
@@ -58,7 +63,8 @@ onUnmounted(() => {
 
       </td>
       <td>
-        {{ expense.createdAt.toDate().toLocaleString() }}
+        {{ formatDate(expense.createdAt) }}
+        <!-- {{ expense.createdAt?.toDate()?.toLocaleString() }} -->
       </td>
     </tr>
     </tbody>
