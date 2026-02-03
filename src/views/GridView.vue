@@ -1,33 +1,17 @@
 <script setup lang="ts">
 import {type Category, useCategoryStore} from '@/stores/categories'
 import {useSettingsStore} from "@/stores/settings.ts";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import CellEditor from "@/components/CellEditor.vue";
-import {hasVisibleMonths, isFuture, monthsForYear, getMonthName, type YearMonth} from "@/clock.ts";
+import {getMonthName, hasVisibleMonths, isFuture, monthsForYear, type YearMonth} from "@/clock.ts";
 import {db} from "@/firebase.ts";
-import {collection, addDoc, serverTimestamp, query, onSnapshot} from "firebase/firestore";
-import {useAuthStore} from "@/stores/auth.ts";
-import type {FieldValue} from 'firebase/firestore';
+import {collection, onSnapshot, query} from "firebase/firestore";
 import ExpenseModal from "@/components/ExpenseModal.vue";
 import {formatCurrency} from "@/currency.ts";
 import * as ss from 'simple-statistics';
+import type {Expense} from "@/expenses.ts";
 
-export interface Expense {
-  id?: string;
-  amount: number;
-  year: number;
-  month: number;
-  categoryId: string;
-  targetUserId: string;
-  targetUserName: string;
-  creatorUid: string;
-  creatorEmail: string | null;
-  createdAt: FieldValue;
-  createdBy: string;
-  createdByName: string;
-}
 
-const authStore = useAuthStore()
 const categories = useCategoryStore().allCategories
 const {availableYears, userSettings} = useSettingsStore()
 

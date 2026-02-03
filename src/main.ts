@@ -27,11 +27,13 @@ const i18n = createI18n({
       'add_expense': 'Dodaj strošek',
       'existing_expenses': 'Obstojči stroški',
       'pick_user': 'Izberi uporabnika',
+      'transactions': 'Tansakcije',
+      'added_by': 'dodal'
     },
     en: {
       'logout': 'Logout',
       'avg_short': 'Avg.',
-      'total': 'Total'
+      'total': 'Total',
     },
   },
 })

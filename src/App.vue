@@ -24,7 +24,9 @@ async function logout(event: Event) {
     <nav v-if="authStore.isAuthenticated">
       <RouterLink to="/" class="my-f">myf</RouterLink>
       <span>{{ authStore.userEmail }}</span> |
-      <a @click.prevent="logout($event)" >{{ $t('logout') }}</a>
+      <RouterLink to="/transactions">{{ $t('transactions') }}</RouterLink>
+      |
+      <a @click.prevent="logout($event)">{{ $t('logout') }}</a>
     </nav>
   </header>
 
@@ -34,6 +36,12 @@ async function logout(event: Event) {
 </template>
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
 nav a {
   cursor: pointer;
 }

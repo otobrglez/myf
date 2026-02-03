@@ -17,6 +17,12 @@ const router = createRouter({
       component: LoginView,
       meta: {requiresGuest: true}
     },
+    {
+      path: '/transactions',
+      name: 'transactions',
+      component: () => import('../views/TransactionsView.vue'),
+      meta: {requiresAuth: true}
+    }
   ],
 })
 

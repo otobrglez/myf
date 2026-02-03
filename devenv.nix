@@ -23,8 +23,10 @@ in {
   languages.javascript = {
     enable = true;
     package = unstable-pkgs.nodejs_24;
+
     yarn.enable = true;
     yarn.install.enable = true;
+    yarn.package = unstable-pkgs.yarn-berry;
   };
 
   enterShell = ''
