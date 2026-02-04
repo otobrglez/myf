@@ -58,3 +58,14 @@ tf/*.tfstate
 tf/*.tfstate.*
 tf/terraform.tfvars
 tf/.terraform.lock.hcl
+
+# yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# yarn berry specific
+.yarn/install-state.gz
+.pnp.*

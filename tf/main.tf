@@ -45,7 +45,7 @@ resource "google_firebase_web_app" "spa" {
 resource "google_firebase_hosting_site" "full" {
   provider = google-beta
   project  = var.project_id
-  // site_id  = "myf-live"
+  # site_id  = "myf-live"
   site_id = var.project_id
   app_id  = google_firebase_web_app.spa.app_id
 }
@@ -136,10 +136,13 @@ resource "google_firebaserules_ruleset" "firestore" {
     files {
       name    = "firestore.rules"
       content = <<EOF
+rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
     match /expenses/{expenseId} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
   }
 }

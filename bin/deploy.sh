@@ -2,4 +2,4 @@
 set -ex
 
 yarn run build && \
-  firebase deploy
+  firebase deploy --only hosting:live
