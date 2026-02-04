@@ -8,6 +8,16 @@ import yaml from '@rollup/plugin-yaml'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          vue: ['vue', 'vue-router']
+        }
+      }
+    }
+  },
   plugins: [
     vue(),
     vueJsx(),

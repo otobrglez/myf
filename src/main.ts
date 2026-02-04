@@ -28,6 +28,7 @@ const i18n = createI18n({
       'existing_expenses': 'Obstojči stroški',
       'pick_user': 'Izberi uporabnika',
       'transactions': 'Tansakcije',
+      'grid': 'Mreža',
       'added_by': 'dodal'
     },
     en: {

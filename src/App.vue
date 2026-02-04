@@ -22,8 +22,10 @@ async function logout(event: Event) {
 <template>
   <header>
     <nav v-if="authStore.isAuthenticated">
-      <RouterLink to="/" class="my-f">myf</RouterLink>
+      <span class="my-f">myf</span>
       <span>{{ authStore.userEmail }}</span> |
+      <RouterLink to="/">{{ $t("grid") }}</RouterLink>
+      |
       <RouterLink to="/transactions">{{ $t('transactions') }}</RouterLink>
       |
       <a @click.prevent="logout($event)">{{ $t('logout') }}</a>
