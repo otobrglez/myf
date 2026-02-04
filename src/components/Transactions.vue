@@ -64,7 +64,6 @@ function formatDate(dateRef: UnwrapRef<Expense["createdAt"]>) {
       </td>
       <td>
         {{ formatDate(expense.createdAt) }}
-        <!-- {{ expense.createdAt?.toDate()?.toLocaleString() }} -->
       </td>
     </tr>
     </tbody>
