@@ -28,6 +28,8 @@ async function logout(event: Event) {
       |
       <RouterLink to="/transactions">{{ $t('transactions') }}</RouterLink>
       |
+      <RouterLink to="/categories">{{ $t('categories') }}</RouterLink>
+      |
       <a @click.prevent="logout($event)">{{ $t('logout') }}</a>
     </nav>
   </header>

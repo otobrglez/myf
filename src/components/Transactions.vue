@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref, type UnwrapRef} from "vue";
+import {computed, onMounted, onUnmounted, ref, type UnwrapRef} from "vue";
 import {collection, onSnapshot, query, orderBy} from "firebase/firestore";
+import {useI18n} from "vue-i18n";
 import {db} from "@/firebase.ts";
 import type {Expense} from "@/expenses.ts";
-import {type Category, useCategoryStore} from "@/stores/categories.ts";
+import {useCategoryStore} from "@/stores/categories.ts";
 import {formatCurrency} from "@/currency.ts";
 
-type ExpenseCategory = [Expense, Category?]
+const {t} = useI18n();
 
-const expenses = ref<ExpenseCategory[]>([]);
+const expenses = ref<Expense[]>([]);
 const categories = useCategoryStore().allCategories
+const categoryById = computed(() => new Map(categories.map(category => [category.id, category])))
 
 let unsubscribe: (() => void) | null = null;
 
@@ -17,10 +19,10 @@ onMounted(() => {
   const expensesRef = collection(db, "expenses");
   const q = query(expensesRef, orderBy('year', 'desc'), orderBy('month', 'desc'));
   unsubscribe = onSnapshot(q, (snapshot) => {
-    expenses.value = snapshot.docs.map(doc => ([{
+    expenses.value = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    } as Expense, categories.find(c => c.id === doc.data().categoryId)])) as ExpenseCategory[];
+    } as Expense));
   })
 });
 
@@ -31,6 +33,10 @@ onUnmounted(() => {
 function formatDate(dateRef: UnwrapRef<Expense["createdAt"]>) {
   let date = (dateRef as any)?.toDate();
   return date?.toLocaleDateString(undefined, {year: 'numeric', month: 'short', day: 'numeric'})
+}
+
+function getCategoryName(categoryId: string) {
+  return categoryById.value.get(categoryId)?.name ?? t('unknown_category')
 }
 
 </script>
@@ -48,10 +54,10 @@ function formatDate(dateRef: UnwrapRef<Expense["createdAt"]>) {
     </tr>
     </thead>
     <tbody>
-    <tr v-for="[expense, category] in expenses" :key="expense.id">
+    <tr v-for="expense in expenses" :key="expense.id">
       <td class="col-2">{{ expense.year }} - {{ expense.month }}</td>
       <td class="col-2 amount">{{ formatCurrency(expense.amount) }}</td>
-      <td>{{ category?.name }}</td>
+      <td>{{ getCategoryName(expense.categoryId) }}</td>
       <td>
 
         <div v-if="expense.creatorUid != expense.targetUserId">
