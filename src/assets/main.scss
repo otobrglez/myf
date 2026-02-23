@@ -1,4 +1,4 @@
-@import './base.css';
+@import './base.scss';
 
 #app {
   max-width: 1550px;
@@ -7,8 +7,7 @@
   font-weight: normal;
 }
 
-a,
-.green {
+a {
   text-decoration: none;
   color: hsl(0, 43%, 31%);
   transition: 0.4s;

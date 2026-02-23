@@ -71,33 +71,32 @@ function formatDate(dateRef: UnwrapRef<Expense["createdAt"]>) {
 
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 
 table.transactions {
   border-collapse: collapse;
   width: 100%;
-}
 
-table.transactions th,
-table.transactions td {
-  border-bottom: 1px solid #EEE;
-  padding: 0.3rem;
-}
+  th, td {
+    border-bottom: 1px solid #EEE;
+    padding: 0.3rem;
+  }
 
-table.transactions th {
-  font-weight: bold;
-}
+  th {
+    font-weight: bold;
+  }
 
-table.transactions td.col-1 {
-  width: 100px;
-}
+  td.col-1 {
+    width: 100px;
+  }
 
-table.transactions td.col-2 {
-  width: 130px;
-}
+  td.col-2 {
+    width: 130px;
+  }
 
-table.transactions td.amount {
-  text-align: right;
+  td.amount {
+    text-align: right;
+  }
 }
 
 </style>

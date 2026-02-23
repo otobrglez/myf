@@ -268,6 +268,8 @@ const isCurrentMonth = (yearMonth: YearMonth) => {
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  font-size: 14pt;
+  line-height: 2.2;
 }
 
 .empty-filler {

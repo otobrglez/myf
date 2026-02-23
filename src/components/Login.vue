@@ -5,10 +5,7 @@ import {auth} from '@/firebase'
 import {useRouter} from 'vue-router'
 
 const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
+const [email, password, error] = [ref(''), ref(''), ref('')];
 const loading = ref(false)
 
 const handleLogin = async () => {
@@ -59,7 +56,7 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .login-container {
   display: flex;
   justify-content: center;
@@ -86,22 +83,24 @@ const handleLogin = async () => {
   font-weight: 500;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
+.form-group {
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
 
-.form-group input:focus {
-  outline: none;
-  border-color: #4CAF50;
-}
+    &:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
 
-.form-group input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
+    &:disabled {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .error-message {

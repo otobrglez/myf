@@ -56,14 +56,12 @@ const totalSpent = computed(() => expenses.reduce((sum, e) => sum + e.amount, 0)
       </div>
     </div>
     <div v-else class="breakdown empty">
-          <span class="amount">
-          —
-          </span>
+      <span class="amount">—</span>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .cell-editor {
   width: 100%;
   padding: 0;
@@ -81,11 +79,11 @@ const totalSpent = computed(() => expenses.reduce((sum, e) => sum + e.amount, 0)
   flex-direction: column;
   width: 100%;
   gap: 2px;
-}
 
-.breakdown.empty .amount {
-  color: #d1d1d1;
-  text-align: center;
+  &.empty .amount {
+    color: #d1d1d1;
+    text-align: center;
+  }
 }
 
 .user-row {
@@ -97,14 +95,6 @@ const totalSpent = computed(() => expenses.reduce((sum, e) => sum + e.amount, 0)
   margin-bottom: 1px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   width: 100%;
-}
-
-.amount {
-  text-align: right;
-  flex-grow: 1;
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.8);
 }
 
 .amount {

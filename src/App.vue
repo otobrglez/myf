@@ -37,7 +37,7 @@ async function logout(event: Event) {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 header {
   display: flex;
   justify-content: space-between;

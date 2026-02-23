@@ -120,7 +120,7 @@ const deleteExpense = async (id: string) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -236,10 +236,10 @@ const deleteExpense = async (id: string) => {
   cursor: pointer;
   padding: 0 5px;
   line-height: 1;
-}
 
-.btn-delete:hover {
-  color: #a50e0e;
+  &:hover {
+    color: #a50e0e;
+  }
 }
 
 .divider {

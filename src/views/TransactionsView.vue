@@ -5,8 +5,6 @@ import Transactions from "@/components/Transactions.vue";
 
 <template>
   <h1>{{ $t('transactions') }}</h1>
-
-
   <Transactions></Transactions>
 </template>
 
